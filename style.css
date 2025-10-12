@@ -1,0 +1,127 @@
+/* 卡片可点击样式 */
+.card-link {
+    text-decoration: none; /* 去掉下划线 */
+    color: inherit; /* 继承文字颜色 */
+    display: block; /* 占满整行，方便点击 */
+}
+
+.card-link:hover {
+    cursor: pointer;
+}
+
+/* 默认深色模式 */
+:root {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --header-bg: #1f1f1f;
+    --accent-color: #4CAF50;
+    --card-bg: #1f1f1f;
+    --hover-bg: #2a2a2a;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+    background-color: var(--header-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+}
+
+header h1 {
+    color: var(--accent-color);
+    margin: 0;
+}
+
+nav a {
+    margin-left: 20px;
+    color: var(--text-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: var(--accent-color);
+}
+
+button#mode-toggle {
+    margin-left: 20px;
+    padding: 5px 10px;
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button#mode-toggle:hover {
+    opacity: 0.8;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+h2 {
+    color: var(--accent-color);
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background-color: var(--hover-bg);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--card-bg);
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+th {
+    color: var(--accent-color);
+}
+
+tr:hover {
+    background-color: var(--hover-bg);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    background-color: var(--header-bg);
+}
+
+/* 亮色模式 */
+body.light-mode {
+    --bg-color: #f0f0f0;
+    --text-color: #121212;
+    --header-bg: #ffffff;
+    --accent-color: #4CAF50;
+    --card-bg: #ffffff;
+    --hover-bg: #e0e0e0;
+}
