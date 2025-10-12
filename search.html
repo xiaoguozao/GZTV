@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GZTV - 搜索结果</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>GZTV</h1>
+    <nav>
+        <a href="index.html">首页</a>
+        <a href="news.html">新闻</a>
+        <a href="matches.html">比赛</a>
+        <a href="ranking.html">排名</a>
+        <button id="mode-toggle">切换颜色模式</button>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>搜索结果</h2>
+    <div id="results"></div>
+</div>
+
+<footer>&copy; 2025 GZTV</footer>
+
+<script>
+    // 模式切换
+    const toggleBtn = document.getElementById('mode-toggle');
+    if(localStorage.getItem('theme') === 'light'){
+        document.body.classList.add('light-mode');
+    }
+    toggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    });
+
+    // 获取搜索关键字
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('query')?.toLowerCase() || '';
+    const resultsContainer = document.getElementById('results');
+
+    // 搜索数据：整合 index/news/matches/teams 内容
+    const items = [
+        // 新闻
+        {type:'新闻', title:'战队A夺冠！', content:'战队A战胜所有对手，夺得冠军。'},
+        {type:'新闻', title:'新赛事开赛', content:'全球电竞锦标赛即将开赛，各大战队已报名。'},
+        {type:'新闻', title:'战队B获得积分榜第一', content:'战队B在最近比赛中表现出色，积分第一。'},
+        // 比赛
+        {type:'比赛', title:'战队A vs 战队B', content:'时间：2025-10-15，比分：2-1'},
+        {type:'比赛', title:'战队C vs 战队D', content:'时间：2025-10-20，比分：1-2'},
+        // 战队
+        {type:'战队', title:'战队A', content:'积分：45，成员：小明、小红、小强'},
+        {type:'战队', title:'战队B', content:'积分：42，成员：小李、小张、小王'},
+        {type:'战队', title:'战队C', content:'积分：38，成员：小华、小美、小刚'},
+        {type:'战队', title:'战队D', content:'积分：35，成员：小亮、小兰、小东'}
+    ];
+
+    // 过滤匹配结果
+    const matches = items.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.content.toLowerCase().includes(query)
+    );
+
+    if(matches.length === 0){
+        resultsContainer.innerHTML = '<p>没有找到相关内容。</p>';
+    } else {
+        matches.forEach(item => {
+            const div = document.createElement('div');
+            div.classList.add('card');
+
+            // 根据类型设置跳转链接
+            let link = "#";
+            if(item.type === "战队") link = "teams.html";      
+            else if(item.type === "比赛") link = "matches.html"; 
+            else if(item.type === "新闻") link = "news.html";    
+
+            div.innerHTML = `<h3><a href="${link}">${item.title}</a> <small>[${item.type}]</small></h3>
+                             <p>${item.content}</p>`;
+            resultsContainer.appendChild(div);
+        });
+    }
+</script>
+</body>
+</html>
