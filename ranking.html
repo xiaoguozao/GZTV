@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GZTV - 排名</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>GZTV</h1>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="news.html">新闻</a>
+            <a href="matches.html">比赛</a>
+            <a href="ranking.html">排名</a>
+            <input type="text" id="search-input" placeholder="搜索排名/战队">
+            <button id="search-btn">搜索</button>
+            <button id="mode-toggle">切换颜色模式</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>战队排名</h2>
+        <table class="search-item">
+            <tr><th>排名</th><th>战队</th><th>积分</th></tr>
+            <tr><td>1</td><td>战队A</td><td>45</td></tr>
+            <tr><td>2</td><td>战队B</td><td>42</td></tr>
+            <tr><td>3</td><td>战队C</td><td>38</td></tr>
+        </table>
+    </div>
+
+    <footer>&copy; 2025 GZTV</footer>
+
+    <script>
+        // 模式切换
+        const toggleBtn = document.getElementById('mode-toggle');
+        if(localStorage.getItem('theme') === 'light'){
+            document.body.classList.add('light-mode');
+        }
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // 搜索跳转功能
+        const searchBtn = document.getElementById('search-btn');
+        const searchInput = document.getElementById('search-input');
+
+        function doSearch() {
+            const query = searchInput.value.trim();
+            if(query){
+                window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+            }
+        }
+
+        searchBtn.addEventListener('click', doSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') doSearch();
+        });
+    </script>
+</body>
+</html>
