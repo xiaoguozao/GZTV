@@ -1,0 +1,74 @@
+<!DOCTYPE html> 
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GZTV - 比赛</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>GZTV</h1>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="news.html">新闻</a>
+            <a href="matches.html">比赛</a>
+            <a href="ranking.html">排名</a>
+            <!-- 搜索框 -->
+            <input type="text" id="search-input" placeholder="搜索比赛/战队">
+            <button id="search-btn">搜索</button>
+            <!-- 模式切换按钮 -->
+            <button id="mode-toggle">切换颜色模式</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>近期比赛</h2>
+
+        <!-- 可搜索比赛内容 -->
+        <div class="card search-item">
+            <h3>战队A vs 战队B</h3>
+            <p>时间：2025-10-15</p>
+            <p>比分：2-1</p>
+        </div>
+        <div class="card search-item">
+            <h3>战队C vs 战队D</h3>
+            <p>时间：2025-10-20</p>
+            <p>比分：1-2</p>
+        </div>
+    </div>
+
+    <footer>&copy; 2025 GZTV</footer>
+
+    <script>
+        // 模式切换
+        const toggleBtn = document.getElementById('mode-toggle');
+        if(localStorage.getItem('theme') === 'light'){
+            document.body.classList.add('light-mode');
+        }
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // 搜索跳转功能
+        const searchBtn = document.getElementById('search-btn');
+        const searchInput = document.getElementById('search-input');
+
+        function doSearch() {
+            const query = searchInput.value.trim();
+            if(query){
+                // 跳转到 search.html 并带上搜索关键字
+                window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+            }
+        }
+
+        searchBtn.addEventListener('click', doSearch);
+
+        // 支持回车搜索
+        searchInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') doSearch();
+        });
+    </script>
+</body>
+</html>
