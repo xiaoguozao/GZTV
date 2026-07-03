@@ -1,0 +1,62 @@
+{
+  "teams": [
+    {
+      "name": "Star Iron",
+      "country": "China",
+      "rating": 0.94,
+      "map": "Dust2",
+      "games": 750,
+      "members": [
+        { "name": "小果皂", "age": 17, "country": "China" }
+      ]
+    },
+    {
+      "name": "战队A",
+      "country": "China",
+      "rating": 1.02,
+      "map": "Mirage",
+      "games": 120,
+      "members": [
+        { "name": "小明" },
+        { "name": "小红" },
+        { "name": "小强" }
+      ]
+    },
+    {
+      "name": "战队B",
+      "country": "China",
+      "rating": 0.98,
+      "map": "Inferno",
+      "games": 200,
+      "members": [
+        { "name": "小李" },
+        { "name": "小张" },
+        { "name": "小王" }
+      ]
+    },
+    {
+      "name": "战队C",
+      "country": "China",
+      "rating": 0.96,
+      "map": "Nuke",
+      "games": 180,
+      "members": [
+        { "name": "小华" },
+        { "name": "小美" },
+        { "name": "小刚" }
+      ]
+    },
+    {
+      "name": "战队D",
+      "country": "China",
+      "rating": 0.95,
+      "map": "Ancient",
+      "games": 160,
+      "members": [
+        { "name": "小亮" },
+        { "name": "小兰" },
+        { "name": "小东" }
+      ]
+    }
+  ]
+}
