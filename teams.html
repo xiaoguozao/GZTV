@@ -1,123 +1,133 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GZTV - 战队</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GZTV - 战队</title>
+<link rel="stylesheet" href="style.css">
 
-    <style>
-        /* 确保整个卡片可点击 */
-        .card-link {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .card-link:hover {
-            cursor: pointer;
-            background-color: #f0f0f0;
-        }
-    </style>
+<style>
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+.card-link:hover {
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-    <h1>GZTV</h1>
-    <nav>
-        <a href="index.html">首页</a>
-        <a href="news.html">新闻</a>
-        <a href="matches.html">比赛</a>
-        <a href="ranking.html">排名</a>
-        <a href="teams.html">战队</a>
+<h1>GZTV</h1>
+<nav>
+    <a href="index.html">首页</a>
+    <a href="news.html">新闻</a>
+    <a href="matches.html">比赛</a>
+    <a href="ranking.html">排名</a>
+    <a href="teams.html">战队</a>
 
-        <input type="text" id="search-input" placeholder="搜索战队">
-        <button id="search-btn">搜索</button>
+    <input type="text" id="search-input" placeholder="搜索战队/国家/地图">
+    <button id="search-btn">搜索</button>
 
-        <button id="mode-toggle">切换颜色模式</button>
-    </nav>
+    <button id="mode-toggle">切换颜色模式</button>
+</nav>
 </header>
 
 <div class="container">
     <h2>战队列表</h2>
 
-    <!-- 🔥 Star Iron 新增战队 -->
-    <a href="team-star-iron.html" class="card card-link search-item">
-        <h3>Star Iron</h3>
-        <p>China · Rating 0.94</p>
-        <p>Map Pool: Dust2 (750 games)</p>
-    </a>
-
-    <!-- 战队A -->
-    <a href="team-a.html" class="card card-link search-item">
-        <h3>战队A</h3>
-        <p>积分：45</p>
-        <p>成员：小明、小红、小强</p>
-    </a>
-
-    <!-- 战队B -->
-    <a href="team-b.html" class="card card-link search-item">
-        <h3>战队B</h3>
-        <p>积分：42</p>
-        <p>成员：小李、小张、小王</p>
-    </a>
-
-    <!-- 战队C -->
-    <a href="team-c.html" class="card card-link search-item">
-        <h3>战队C</h3>
-        <p>积分：38</p>
-        <p>成员：小华、小美、小刚</p>
-    </a>
-
-    <!-- 战队D -->
-    <a href="team-d.html" class="card card-link search-item">
-        <h3>战队D</h3>
-        <p>积分：35</p>
-        <p>成员：小亮、小兰、小东</p>
-    </a>
-
+    <div id="team-list"></div>
 </div>
 
 <footer>
-    &copy; 2025 GZTV
+&copy; 2025 GZTV
 </footer>
 
 <script>
-    // 模式切换
-    const toggleBtn = document.getElementById('mode-toggle');
+let DB = { teams: [] };
+let ALL_TEAMS = [];
 
-    if(localStorage.getItem('theme') === 'light'){
-        document.body.classList.add('light-mode');
-    }
+/* =========================
+   📦 读取 data.json（唯一数据源）
+========================= */
+fetch('data.json')
+.then(res => res.json())
+.then(data => {
+    DB = data;
+    ALL_TEAMS = data.teams;
+    renderTeams(ALL_TEAMS);
+});
 
-    toggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('light-mode');
-        localStorage.setItem(
-            'theme',
-            document.body.classList.contains('light-mode') ? 'light' : 'dark'
-        );
+/* =========================
+   🎮 渲染系统（自动生成）
+========================= */
+const container = document.getElementById("team-list");
+
+function renderTeams(list) {
+    container.innerHTML = "";
+
+    list.forEach(team => {
+
+        const a = document.createElement("a");
+
+        a.className = "card card-link search-item";
+        a.href = "team-" + team.name.toLowerCase().replace(/ /g, "-") + ".html";
+
+        const members = team.members.map(m => m.name).join("、");
+
+        a.innerHTML = `
+            <h3>${team.name}</h3>
+            <p>🇨🇳 ${team.country} · Rating ${team.rating}</p>
+            <p>Map: ${team.map} (${team.games} games)</p>
+            <p>Members: ${members}</p>
+        `;
+
+        container.appendChild(a);
     });
+}
 
-    // 搜索功能
-    const searchBtn = document.getElementById('search-btn');
-    const searchInput = document.getElementById('search-input');
+/* =========================
+   🔍 搜索系统（全数据搜索）
+========================= */
+function searchTeams() {
+    const key = document.getElementById('search-input').value.toLowerCase();
 
-    searchBtn.addEventListener('click', () => {
-        const filter = searchInput.value.toLowerCase();
-        const items = document.querySelectorAll('.search-item');
+    const result = ALL_TEAMS.filter(t =>
+        t.name.toLowerCase().includes(key) ||
+        t.country.toLowerCase().includes(key) ||
+        t.map.toLowerCase().includes(key) ||
+        t.members.some(m => m.name.toLowerCase().includes(key))
+    );
 
-        items.forEach(item => {
-            item.style.display =
-                item.textContent.toLowerCase().includes(filter)
-                ? ''
-                : 'none';
-        });
-    });
+    renderTeams(result);
+}
 
-    searchInput.addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') searchBtn.click();
-    });
+document.getElementById('search-btn').addEventListener('click', searchTeams);
+
+document.getElementById('search-input').addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') searchTeams();
+});
+
+/* =========================
+   🎨 模式切换
+========================= */
+const toggleBtn = document.getElementById('mode-toggle');
+
+if(localStorage.getItem('theme') === 'light'){
+    document.body.classList.add('light-mode');
+}
+
+toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    localStorage.setItem(
+        'theme',
+        document.body.classList.contains('light-mode') ? 'light' : 'dark'
+    );
+});
 </script>
 
 </body>
