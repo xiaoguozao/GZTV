@@ -1,69 +1,31 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GZTV - 战队</title>
-<link rel="stylesheet" href="style.css">
-
-<style>
-.card-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-}
-.card-link:hover {
-    cursor: pointer;
-    background-color: #f0f0f0;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-<h1>GZTV</h1>
-<nav>
-    <a href="index.html">首页</a>
-    <a href="news.html">新闻</a>
-    <a href="matches.html">比赛</a>
-    <a href="ranking.html">排名</a>
-    <a href="teams.html">战队</a>
-
-    <input type="text" id="search-input" placeholder="搜索战队/国家/地图">
-    <button id="search-btn">搜索</button>
-
-    <button id="mode-toggle">切换颜色模式</button>
-</nav>
-</header>
-
-<div class="container">
-    <h2>战队列表</h2>
-
-    <div id="team-list"></div>
-</div>
-
-<footer>
-&copy; 2025 GZTV
-</footer>
-
 <script>
-let DB = { teams: [] };
 let ALL_TEAMS = [];
+let DATA_READY = false;
 
 /* =========================
-   📦 读取 data.json（唯一数据源）
+   📦 加载数据（强制稳定版）
 ========================= */
-fetch('./data.json')
-.then(res => res.json())
-.then(data => {
-    DB = data;
-    ALL_TEAMS = data.teams;
-    renderTeams(ALL_TEAMS);
-});
+async function loadData() {
+    try {
+        const res = await fetch('./data.json?t=' + Date.now()); 
+        const data = await res.json();
+
+        ALL_TEAMS = data.teams;
+        DATA_READY = true;
+
+        console.log("✅ DATA LOADED:", ALL_TEAMS);
+
+        renderTeams(ALL_TEAMS);
+
+    } catch (err) {
+        console.error("❌ LOAD ERROR:", err);
+    }
+}
+
+loadData();
 
 /* =========================
-   🎮 渲染系统（自动生成）
+   🎮 渲染
 ========================= */
 const container = document.getElementById("team-list");
 
@@ -71,7 +33,6 @@ function renderTeams(list) {
     container.innerHTML = "";
 
     list.forEach(team => {
-
         const a = document.createElement("a");
 
         a.className = "card card-link search-item";
@@ -81,8 +42,8 @@ function renderTeams(list) {
 
         a.innerHTML = `
             <h3>${team.name}</h3>
-            <p>🇨🇳 ${team.country} · Rating ${team.rating}</p>
-            <p>Map: ${team.map} (${team.games} games)</p>
+            <p>${team.country} · Rating ${team.rating}</p>
+            <p>${team.map} (${team.games} games)</p>
             <p>Members: ${members}</p>
         `;
 
@@ -91,17 +52,24 @@ function renderTeams(list) {
 }
 
 /* =========================
-   🔍 搜索系统（全数据搜索）
+   🔍 搜索（绝对稳定版）
 ========================= */
 function searchTeams() {
+    if (!DATA_READY) {
+        console.log("⏳ 数据还没加载完");
+        return;
+    }
+
     const key = document.getElementById('search-input').value.toLowerCase();
 
-    const result = ALL_TEAMS.filter(t =>
-        t.name.toLowerCase().includes(key) ||
-        t.country.toLowerCase().includes(key) ||
-        t.map.toLowerCase().includes(key) ||
-        t.members.some(m => m.name.toLowerCase().includes(key))
+    const result = ALL_TEAMS.filter(team =>
+        team.name.toLowerCase().includes(key) ||
+        team.country.toLowerCase().includes(key) ||
+        team.map.toLowerCase().includes(key) ||
+        team.members.some(m => m.name.toLowerCase().includes(key))
     );
+
+    console.log("🔍 SEARCH RESULT:", result);
 
     renderTeams(result);
 }
@@ -109,15 +77,15 @@ function searchTeams() {
 document.getElementById('search-btn').addEventListener('click', searchTeams);
 
 document.getElementById('search-input').addEventListener('keypress', (e) => {
-    if(e.key === 'Enter') searchTeams();
+    if (e.key === 'Enter') searchTeams();
 });
 
 /* =========================
-   🎨 模式切换
+   🎨 模式切换（保留）
 ========================= */
 const toggleBtn = document.getElementById('mode-toggle');
 
-if(localStorage.getItem('theme') === 'light'){
+if (localStorage.getItem('theme') === 'light') {
     document.body.classList.add('light-mode');
 }
 
@@ -129,6 +97,3 @@ toggleBtn.addEventListener('click', () => {
     );
 });
 </script>
-
-</body>
-</html>
