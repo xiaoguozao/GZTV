@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GZTV - 战队</title>
     <link rel="stylesheet" href="style.css">
+
     <style>
         /* 确保整个卡片可点击 */
         .card-link {
@@ -12,83 +13,112 @@
             text-decoration: none;
             color: inherit;
         }
+
         .card-link:hover {
             cursor: pointer;
-            background-color: #f0f0f0; /* 可选：悬停效果 */
+            background-color: #f0f0f0;
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <h1>GZTV</h1>
-        <nav>
-            <a href="index.html">首页</a>
-            <a href="news.html">新闻</a>
-            <a href="matches.html">比赛</a>
-            <a href="ranking.html">排名</a>
-            <a href="teams.html">战队</a>
-            <input type="text" id="search-input" placeholder="搜索战队">
-            <button id="search-btn">搜索</button>
-            <button id="mode-toggle">切换颜色模式</button>
-        </nav>
-    </header>
 
-    <div class="container">
-        <h2>战队列表</h2>
+<header>
+    <h1>GZTV</h1>
+    <nav>
+        <a href="index.html">首页</a>
+        <a href="news.html">新闻</a>
+        <a href="matches.html">比赛</a>
+        <a href="ranking.html">排名</a>
+        <a href="teams.html">战队</a>
 
-        <!-- 战队信息，整体可点击 -->
-        <a href="team-a.html" class="card card-link search-item">
-            <h3>战队A</h3>
-            <p>积分：45</p>
-            <p>成员：小明、小红、小强</p>
-        </a>
-        <a href="team-b.html" class="card card-link search-item">
-            <h3>战队B</h3>
-            <p>积分：42</p>
-            <p>成员：小李、小张、小王</p>
-        </a>
-        <a href="team-c.html" class="card card-link search-item">
-            <h3>战队C</h3>
-            <p>积分：38</p>
-            <p>成员：小华、小美、小刚</p>
-        </a>
-        <a href="team-d.html" class="card card-link search-item">
-            <h3>战队D</h3>
-            <p>积分：35</p>
-            <p>成员：小亮、小兰、小东</p>
-        </a>
-    </div>
+        <input type="text" id="search-input" placeholder="搜索战队">
+        <button id="search-btn">搜索</button>
 
-    <footer>
-        &copy; 2025 GZTV
-    </footer>
+        <button id="mode-toggle">切换颜色模式</button>
+    </nav>
+</header>
 
-    <script>
-        // 模式切换
-        const toggleBtn = document.getElementById('mode-toggle');
-        if(localStorage.getItem('theme') === 'light'){
-            document.body.classList.add('light-mode');
-        }
-        toggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+<div class="container">
+    <h2>战队列表</h2>
+
+    <!-- 🔥 Star Iron 新增战队 -->
+    <a href="team-star-iron.html" class="card card-link search-item">
+        <h3>Star Iron</h3>
+        <p>China · Rating 0.94</p>
+        <p>Map Pool: Dust2 (750 games)</p>
+    </a>
+
+    <!-- 战队A -->
+    <a href="team-a.html" class="card card-link search-item">
+        <h3>战队A</h3>
+        <p>积分：45</p>
+        <p>成员：小明、小红、小强</p>
+    </a>
+
+    <!-- 战队B -->
+    <a href="team-b.html" class="card card-link search-item">
+        <h3>战队B</h3>
+        <p>积分：42</p>
+        <p>成员：小李、小张、小王</p>
+    </a>
+
+    <!-- 战队C -->
+    <a href="team-c.html" class="card card-link search-item">
+        <h3>战队C</h3>
+        <p>积分：38</p>
+        <p>成员：小华、小美、小刚</p>
+    </a>
+
+    <!-- 战队D -->
+    <a href="team-d.html" class="card card-link search-item">
+        <h3>战队D</h3>
+        <p>积分：35</p>
+        <p>成员：小亮、小兰、小东</p>
+    </a>
+
+</div>
+
+<footer>
+    &copy; 2025 GZTV
+</footer>
+
+<script>
+    // 模式切换
+    const toggleBtn = document.getElementById('mode-toggle');
+
+    if(localStorage.getItem('theme') === 'light'){
+        document.body.classList.add('light-mode');
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        localStorage.setItem(
+            'theme',
+            document.body.classList.contains('light-mode') ? 'light' : 'dark'
+        );
+    });
+
+    // 搜索功能
+    const searchBtn = document.getElementById('search-btn');
+    const searchInput = document.getElementById('search-input');
+
+    searchBtn.addEventListener('click', () => {
+        const filter = searchInput.value.toLowerCase();
+        const items = document.querySelectorAll('.search-item');
+
+        items.forEach(item => {
+            item.style.display =
+                item.textContent.toLowerCase().includes(filter)
+                ? ''
+                : 'none';
         });
+    });
 
-        // 搜索功能
-        const searchBtn = document.getElementById('search-btn');
-        const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') searchBtn.click();
+    });
+</script>
 
-        searchBtn.addEventListener('click', () => {
-            const filter = searchInput.value.toLowerCase();
-            const items = document.querySelectorAll('.search-item');
-            items.forEach(item => {
-                item.style.display = item.textContent.toLowerCase().includes(filter) ? '' : 'none';
-            });
-        });
-
-        searchInput.addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') searchBtn.click();
-        });
-    </script>
 </body>
 </html>
