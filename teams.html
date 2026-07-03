@@ -54,7 +54,7 @@ let ALL_TEAMS = [];
 /* =========================
    📦 读取 data.json（唯一数据源）
 ========================= */
-fetch('data.json')
+fetch('./data.json')
 .then(res => res.json())
 .then(data => {
     DB = data;
